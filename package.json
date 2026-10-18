@@ -1,0 +1,16 @@
+{
+  "name": "tax-simulation-server",
+  "version": "1.0.0",
+  "description": "May姐出口退税实操带教系统 - 轻量后端（登录鉴权 / 学员审核 / 模块授权 / 操作日志 / 备份恢复）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

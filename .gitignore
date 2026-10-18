@@ -1,0 +1,14 @@
+# 依赖（部署时由平台自动安装，无需上传）
+node_modules/
+
+# 可读原版源码（混淆前的 app.js / data.js / server.js）—— 绝不可上传，否则混淆白做
+src/
+
+# 运行期数据（学员申请 / 审核 / 操作日志；含哈希密码，绝不提交）
+server-data.json
+server-data.json.tmp
+
+# 系统临时文件
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+  var ver = '2026101858';
+  var saved = localStorage.getItem('tax_sim_cache_ver');
+  if (saved !== ver) {
+    localStorage.setItem('tax_sim_cache_ver', ver);
+    if (location.reload) location.reload(true);
+  }
+})();
+</script>
+<title>May姐出口退税实操带教 | 电子税务局出口退税仿真申报系统</title>
+<link rel="stylesheet" href="style.css?v=2026101858">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>
+/* 额外内联样式补充 */
+.tip-box { background: #fff8e1; border: 1px solid #ffe082; padding: 10px 15px; margin-bottom: 12px; font-size: 12px; color: #856404; border-radius: 2px; }
+.declaration-box { background: #e3f2fd; border: 1px solid #90caf9; padding: 10px 15px; margin-bottom: 12px; font-size: 12px; color: #0d47a1; border-radius: 2px; }
+.qr-placeholder { width: 150px; height: 150px; background: #f5f5f5; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #999; text-align: center; margin: 0 auto; }
+.upload-zone { border: 2px dashed #ccc; padding: 20px; text-align: center; color: #999; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.upload-zone:hover { border-color: #2a7fd4; color: #2a7fd4; background: #f0f7ff; }
+.question-item { border: 1px solid #ddd; padding: 12px; margin-bottom: 10px; background: #fff; border-radius: 2px; }
+.question-item .q-title { font-weight: bold; margin-bottom: 6px; color: #333; }
+.question-item .q-options { display: flex; flex-direction: column; gap: 6px; }
+.question-item .q-options label { display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; }
+.question-item.correct { border-color: #27ae60; background: #e8f5e9; }
+.question-item.wrong { border-color: #e74c3c; background: #ffebee; }
+.score-badge { display: inline-block; padding: 4px 12px; font-size: 14px; font-weight: bold; border-radius: 2px; }
+.score-badge.pass { background: #e8f5e9; color: #27ae60; }
+.score-badge.fail { background: #ffebee; color: #e74c3c; }
+.login-footer { text-align: center; margin-top: 15px; font-size: 11px; color: #999; }
+.login-footer a { color: #2a7fd4; cursor: pointer; }
+.login-footer a:hover { text-decoration: underline; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.top-tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 15px; }
+.top-tab { padding: 8px 20px; font-size: 12px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.top-tab:hover { color: #2a7fd4; }
+.top-tab.active { color: #2a7fd4; border-bottom-color: #2a7fd4; font-weight: bold; }
+.filter-bar { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+.filter-bar input, .filter-bar select { padding: 4px 8px; border: 1px solid #ccc; font-size: 12px; height: 26px; }
+.file-list { margin-top: 10px; }
+.file-list-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border: 1px solid #eee; margin-bottom: 4px; font-size: 12px; }
+.file-list-item .file-name { color: #333; }
+.file-list-item .file-status { font-size: 11px; }
+.file-list-item .file-actions { display: flex; gap: 4px; }
+.drawer-section { margin-bottom: 20px; }
+.drawer-section-title { font-size: 14px; font-weight: bold; color: #2a7fd4; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+.report-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+.report-item .report-name { font-size: 13px; color: #333; }
+.report-item .report-actions { display: flex; gap: 6px; }
+.checkbox-group-inline { display: flex; flex-wrap: wrap; gap: 10px; }
+.checkbox-group-inline label { display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer; }
+.step-flow { display: flex; align-items: center; gap: 4px; margin: 10px 0; flex-wrap: wrap; }
+.step-flow .step-item { padding: 4px 10px; background: #f0f0f0; border: 1px solid #ddd; font-size: 11px; color: #666; border-radius: 2px; }
+.step-flow .step-item.done { background: #e8f5e9; border-color: #a5d6a7; color: #2e7d32; }
+.step-flow .step-item.current { background: #e3f2fd; border-color: #90caf9; color: #1565c0; font-weight: bold; }
+.step-flow .step-arrow { color: #999; font-size: 11px; }
+.timeline { position: relative; padding-left: 20px; }
+.timeline::before { content: ""; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: #ddd; }
+.timeline-item { position: relative; padding: 8px 0; padding-left: 15px; }
+.timeline-item::before { content: ""; position: absolute; left: -17px; top: 12px; width: 8px; height: 8px; background: #2a7fd4; border-radius: 50%; }
+.timeline-item .time { font-size: 11px; color: #999; }
+.timeline-item .desc { font-size: 12px; color: #333; }
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- 登录 / 申请 / 后台 页面 -->
+<!-- ============================================ -->
+<div id="loginPage" class="login-page">
+  <div class="login-box">
+    <div class="login-title">May姐出口退税实操带教</div>
+    <div class="login-tabs">
+      <div class="login-tab active" onclick="switchLoginTab('apply')">新学员注册</div>
+      <div class="login-tab" onclick="switchLoginTab('login')">学员登录</div>
+      <div class="login-tab" onclick="switchLoginTab('admin')">老师后台管理</div>
+    </div>
+
+    <!-- 申请开通 -->
+    <div id="applyPanel" class="tab-panel active">
+      <div class="form-group">
+        <label class="form-label">姓名 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="applyName" placeholder="请输入真实姓名">
+      </div>
+      <div class="form-group">
+        <label class="form-label">微信昵称 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="applyWechat" placeholder="请输入微信昵称">
+      </div>
+      <div class="form-group">
+        <label class="form-label">手机号后四位 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="applyPhone" placeholder="请输入手机号后四位" maxlength="4">
+      </div>
+      <div class="form-group">
+        <label class="form-label">班级邀请码 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="applyCode" placeholder="请输入班级邀请码（向老师获取）">
+        <div style="font-size:12px;color:#999;margin-top:4px">没有邀请码无法注册，请联系老师领取</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">学习身份 <span class="required">*</span></label>
+        <select class="form-select" id="applyIdentity">
+          <option value="">请选择</option>
+          <option value="体验申请">体验申请</option>
+          <option value="退税课程学员">退税课程学员</option>
+          <option value="私教学员">私教学员</option>
+          <option value="老师带教班">老师带教班</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">申请模块 <span class="required">*</span></label>
+        <div class="form-checkbox-group" id="applyModules">
+          <label><input type="checkbox" value="电子税务局出口退税仿真申报系统"> 电子税务局出口退税仿真申报系统</label>
+          <label><input type="checkbox" value="外贸企业免退税训练"> 外贸企业免退税训练</label>
+          <label><input type="checkbox" value="生产企业免抵退训练"> 生产企业免抵退训练</label>
+          <label><input type="checkbox" value="数据自检训练"> 数据自检训练</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">申请备注</label>
+        <textarea class="form-textarea" id="applyRemark" placeholder="选填，如有特殊说明请填写" style="width:100%;height:60px;"></textarea>
+      </div>
+      <button class="btn-submit" onclick="submitApply()">注册</button>
+      <div class="qr-area">
+        <div class="qr-item">
+          <img src="wechat-mayjie.jpg?v=2026101858" alt="May姐微信二维码" class="qr-code">
+          <div class="qr-text">联系 May姐</div>
+        </div>
+        <div class="qr-item">
+          <img src="wechat-duoduo.jpg?v=2026101858" alt="财务多多微信二维码" class="qr-code">
+          <div class="qr-text">联系财务多多</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 学员登录 -->
+    <div id="loginPanel" class="tab-panel">
+      <div class="form-group">
+        <label class="form-label">姓名 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="loginName" placeholder="请输入姓名">
+      </div>
+      <div class="form-group">
+        <label class="form-label">微信昵称 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="loginWechat" placeholder="请输入微信昵称">
+      </div>
+      <div class="form-group">
+        <label class="form-label">手机号后四位 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="loginPhone" placeholder="请输入手机号后四位" maxlength="4">
+      </div>
+      <button class="btn-submit" onclick="doLogin()">登录系统</button>
+      <div class="login-footer">
+        <a onclick="switchLoginTab('apply')">还没有账号？立即注册</a>
+      </div>
+      <div class="qr-area">
+        <div class="qr-item">
+          <img src="wechat-mayjie.jpg?v=2026101858" alt="May姐微信二维码" class="qr-code">
+          <div class="qr-text">联系 May姐</div>
+        </div>
+        <div class="qr-item">
+          <img src="wechat-duoduo.jpg?v=2026101858" alt="财务多多微信二维码" class="qr-code">
+          <div class="qr-text">联系财务多多</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 后台管理 -->
+    <div id="adminPanel" class="tab-panel">
+      <div class="form-group">
+        <label class="form-label">管理密码 <span class="required">*</span></label>
+        <input type="password" class="form-input" id="adminPassword" placeholder="请输入管理密码" value="">
+      </div>
+      <button class="btn-submit" onclick="doAdminLogin()">进入管理中心</button>
+      <div class="qr-area">
+        <div class="qr-item">
+          <img src="wechat-mayjie.jpg?v=2026101858" alt="May姐微信二维码" class="qr-code">
+          <div class="qr-text">联系 May姐</div>
+        </div>
+        <div class="qr-item">
+          <img src="wechat-duoduo.jpg?v=2026101858" alt="财务多多微信二维码" class="qr-code">
+          <div class="qr-text">联系财务多多</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:20px;color:rgba(255,255,255,0.7);font-size:11px;text-align:center;">
+    本系统为出口退税实操教学模拟系统，用于学员练习电子税务局出口退税申报操作<br>
+    实际申报请以电子税务局和税务机关最新要求为准
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 电子税务局仿真主页面 -->
+<!-- ============================================ -->
+<div id="mainPage" class="hidden">
+  <!-- 顶部系统栏 -->
+  <div class="system-bar">
+    <div class="logo-area">
+      <span class="sys-title">May姐出口退税实操带教</span>
+      <span class="sys-subtitle"></span>
+    </div>
+    <div class="sys-info">
+      <span id="currentStudent">当前学员：--</span>
+      <span id="currentCompany">当前企业：--</span>
+      <span id="currentCompanyType">企业类型：--</span>
+      <span id="currentPeriod">申报所属期：--</span>
+      <a href="javascript:void(0)" onclick="showHelp()">帮助</a>
+      <a href="javascript:void(0)" onclick="doLogout()">退出</a>
+    </div>
+  </div>
+
+  <!-- 主导航 -->
+  <div class="main-nav" id="mainNav">
+    <div class="nav-item active" data-page="home" onclick="navTo('home')">出口退税练习</div>
+    <div class="nav-item" data-page="wm" onclick="navTo('wm')">外贸企业免退税申报</div>
+    <div class="nav-item" data-page="sc" onclick="navTo('sc')">生产企业免抵退税申报</div>
+    <div class="nav-item" data-page="query" onclick="navTo('query')">申报结果查询</div>
+    <div class="nav-item" data-page="practice" onclick="navTo('practice')">当前模块练习</div>
+    <div class="nav-item" data-page="student" onclick="navTo('student')">学员中心</div>
+    <div class="nav-item" data-page="contact" onclick="navTo('contact')">联系May姐</div>
+  </div>
+
+  <!-- 面包屑 -->
+  <div class="breadcrumb" id="breadcrumb">首页</div>
+
+  <!-- 页面容器 -->
+  <div class="page-container" id="pageContainer">
+    <!-- 左侧栏（动态） -->
+    <div class="left-sidebar" id="leftSidebar"></div>
+    <!-- 主内容 -->
+    <div class="main-content" id="mainContent"></div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 后台管理页面 -->
+<!-- ============================================ -->
+<div id="adminPage" class="hidden">
+  <div class="system-bar">
+    <div class="logo-area">
+      <span class="sys-title">老师后台管理中心</span>
+      <span class="sys-subtitle">出口退税仿真申报系统</span>
+    </div>
+    <div class="sys-info">
+      <span>管理员：老师</span>
+      <a href="javascript:void(0)" onclick="exitAdmin()">退出后台</a>
+    </div>
+  </div>
+  <div class="page-container" style="min-height:calc(100vh - 46px);">
+    <div class="admin-sidebar">
+      <div class="admin-sidebar-title">后台管理</div>
+      <div class="admin-nav-item active" data-admin="dashboard" onclick="adminNavTo('dashboard')">数据概览</div>
+      <div class="admin-nav-item" data-admin="applications" onclick="adminNavTo('applications')">学员管理</div>
+      <div class="admin-nav-item" data-admin="students" onclick="adminNavTo('students')">学员管理</div>
+      <div class="admin-nav-item" data-admin="records" onclick="adminNavTo('records')">申报记录</div>
+      <div class="admin-nav-item" data-admin="exercises" onclick="adminNavTo('exercises')">练习记录</div>
+      <div class="admin-nav-item" data-admin="settings" onclick="adminNavTo('settings')">系统设置</div>
+      <div class="admin-nav-item" data-admin="backup" onclick="adminNavTo('backup')">备份与恢复</div>
+      <div class="admin-nav-item" data-admin="brand" onclick="adminNavTo('brand')">品牌与二维码</div>
+    </div>
+    <div class="admin-content" id="adminContent"></div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 弹窗层 -->
+<!-- ============================================ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalBox" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">弹窗标题</span>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 练习抽屉 -->
+<!-- ============================================ -->
+<div class="practice-drawer" id="practiceDrawer">
+  <div class="drawer-header">
+    <span id="drawerTitle">本环节练习</span>
+    <button class="drawer-close" onclick="closePracticeDrawer()">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+<button class="practice-btn hidden" id="practiceBtn" onclick="openPracticeDrawer()">打开本环节练习</button>
+
+<!-- ============================================ -->
+<!-- 脚本 -->
+<!-- ============================================ -->
+<script src="data.js?v=2026101858"></script>
+<script src="app.js?v=2026101858"></script>
+</body>
+</html>
